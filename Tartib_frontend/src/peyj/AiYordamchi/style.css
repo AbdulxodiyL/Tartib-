@@ -1,0 +1,63 @@
+/* AiYordamchi sahifasi uchun responsiv stillar */
+
+/* Chat oynasining umumiy balandligini ekranga moslash */
+.ai-chat-layout {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 180px);
+  min-height: 450px;
+}
+
+@media (max-width: 768px) {
+  /* Mobil ekranlarda asosiy paddingni kamaytiramiz */
+  .main-content {
+    padding: 1rem !important;
+  }
+
+  .page-header.flex-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .clear-chat-btn {
+    align-self: flex-start;
+    padding: 0.6rem 1rem;
+  }
+
+  .ai-chat-layout {
+    height: calc(100vh - 240px); /* Header stack bo'lgani uchun joyni kamaytiramiz */
+    padding: 0.75rem !important;
+  }
+
+  .chat-bubble-row {
+    max-width: 95%; /* Xabar bloklarini kengaytiramiz */
+    gap: 0.5rem;
+  }
+
+  .chat-bubble {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.88rem;
+  }
+
+  /* Takliflarni gorizontal skroll bo'ladigan qilamiz */
+  .chat-suggestions {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 4px 0 12px 0;
+    gap: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; 
+  }
+
+  .chat-suggestions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .suggestion-tag {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}

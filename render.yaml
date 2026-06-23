@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: tartib-backend
+    env: node
+    plan: free
+    rootDir: Tartib_backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        value: https://tartib.vercel.app
+      - key: OPENAI_API_KEY
+        sync: false
