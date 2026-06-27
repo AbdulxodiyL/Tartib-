@@ -1,0 +1,19 @@
+{
+  "appId": "uz.tartib.app",
+  "appName": "Tartib",
+  "webDir": "dist",
+  "server": {
+    "url": "https://tartib-frontend.onrender.com",
+    "cleartext": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#060912",
+      "showSpinner": false
+    }
+  },
+  "android": {
+    "backgroundColor": "#060912"
+  }
+}
