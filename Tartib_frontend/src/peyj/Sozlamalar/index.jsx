@@ -87,7 +87,7 @@ function Sozlamalar({ t }) {
                   onClick={() => updateTheme('bg', key)}
                 >
                   <span style={{ display: 'block', width: '18px', height: '18px', borderRadius: '4px', background: bg.primary, border: `1px solid ${bg.border}`, marginBottom: '4px' }} />
-                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', fontWeight: 700 }}>{bg.name}</span>
+                  <span style={{ fontSize: '0.65rem', color: bg.textSecondary, fontWeight: 700 }}>{bg.name}</span>
                 </button>
               ))}
             </div>
