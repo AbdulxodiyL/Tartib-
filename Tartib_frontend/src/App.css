@@ -1761,15 +1761,68 @@ body.landing-open #root {
 /* ═══════════════════════════════════════════
    MOBILE (max 768px)
 ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   BOTTOM NAVIGATION (faqat mobilda)
+═══════════════════════════════════════════ */
+.bottom-nav {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  /* Show hamburger */
+  /* Hamburger — mobilda ko'rinmasin */
   .hamburger-btn {
-    display: flex;
+    display: none !important;
   }
 
-  /* Main content: paddinni kamaytir, tepadan joy qoldir (hamburger uchun) */
+  /* Sidebar — mobilda ham yashirin tursin */
+  .seadbar-container {
+    transform: translateX(-100%);
+  }
+
+  /* Bottom navigation */
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--bg-sidebar);
+    border-top: 1px solid var(--border-color);
+    padding: 0.4rem 0 env(safe-area-inset-bottom, 0.4rem);
+    gap: 0;
+  }
+
+  .bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.4rem 0.25rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.15s;
+    font-size: 0.6rem;
+    font-weight: 600;
+    font-family: var(--font-family);
+  }
+
+  .bottom-nav-item.active {
+    color: var(--color-accent);
+  }
+
+  .bottom-nav-item span {
+    font-size: 0.58rem;
+    line-height: 1;
+  }
+
+  /* Main content: pastdan bottom nav uchun joy qoldir */
   .main-content {
-    padding: 3.75rem 1rem 1.25rem;
+    padding: 1.25rem 1rem 5.5rem;
   }
 
   /* Page title kichikroq */

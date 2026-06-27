@@ -13,7 +13,7 @@ import AiYordamchi from './peyj/AiYordamchi';
 import { translations } from './utils/translations';
 import { api, clearAuth, getToken } from './utils/api';
 import { requestNotificationPermission } from './utils/notifications';
-import { Menu } from 'lucide-react';
+import { LayoutDashboard, Timer, CheckSquare, TrendingUp, Calendar, Bot } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -92,16 +92,17 @@ function App() {
     }
   };
 
+  const bottomNavItems = [
+    { id: 'dashboard', icon: LayoutDashboard, label: t.dashboard },
+    { id: 'tasks',     icon: CheckSquare,    label: t.tasks },
+    { id: 'pomodoro',  icon: Timer,          label: t.pomodoro },
+    { id: 'calendar',  icon: Calendar,       label: t.calendar },
+    { id: 'income',    icon: TrendingUp,     label: t.income },
+    { id: 'ai',        icon: Bot,            label: t.ai },
+  ];
+
   return (
     <div className={`app-container ${isDarkMode ? 'dark-theme' : ''}`}>
-      <button
-        className="hamburger-btn"
-        onClick={() => setIsSidebarOpen(true)}
-        aria-label="Menyuni ochish"
-      >
-        <Menu size={20} />
-      </button>
-
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)} />
       )}
@@ -119,9 +120,24 @@ function App() {
         user={user}
         onLogout={handleLogout}
       />
+
       <main className="main-content">
         {renderActiveView()}
       </main>
+
+      {/* Mobile bottom navigation */}
+      <nav className="bottom-nav">
+        {bottomNavItems.map(({ id, icon: Icon, label }) => (
+          <button
+            key={id}
+            className={`bottom-nav-item ${activeTab === id ? 'active' : ''}`}
+            onClick={() => setActiveTab(id)}
+          >
+            <Icon size={22} />
+            <span>{label}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
