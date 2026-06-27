@@ -14,6 +14,7 @@ import { translations } from './utils/translations';
 import { api, clearAuth, getToken } from './utils/api';
 import { requestNotificationPermission } from './utils/notifications';
 import { LayoutDashboard, Timer, CheckSquare, TrendingUp, Calendar, Bot } from 'lucide-react';
+import FloatingAI from './components/FloatingAI';
 import './App.css';
 
 function App() {
@@ -98,7 +99,6 @@ function App() {
     { id: 'pomodoro',  icon: Timer,          label: t.pomodoro },
     { id: 'calendar',  icon: Calendar,       label: t.calendar },
     { id: 'income',    icon: TrendingUp,     label: t.income },
-    { id: 'ai',        icon: Bot,            label: t.ai },
   ];
 
   return (
@@ -142,6 +142,9 @@ function App() {
 
         {renderActiveView()}
       </main>
+
+      {/* Floating AI button — all pages */}
+      <FloatingAI t={t} />
 
       {/* Mobile bottom navigation */}
       <nav className="bottom-nav">
