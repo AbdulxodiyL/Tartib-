@@ -12,6 +12,7 @@ import Sozlamalar from './peyj/Sozlamalar';
 import AiYordamchi from './peyj/AiYordamchi';
 import { translations } from './utils/translations';
 import { api, clearAuth, getToken } from './utils/api';
+import { requestNotificationPermission } from './utils/notifications';
 import { Menu } from 'lucide-react';
 import './App.css';
 
@@ -40,6 +41,7 @@ function App() {
   const handleAuthSuccess = (userData) => {
     setUser(userData);
     setShowAuth(false);
+    setTimeout(() => requestNotificationPermission(), 2000);
   };
 
   const handleLogout = () => {

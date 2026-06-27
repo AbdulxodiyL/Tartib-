@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, RotateCcw, Flame, Coffee, Award } from 'lucide-react';
 import { api } from '../../utils/api';
+import { sendNotification } from '../../utils/notifications';
 
 function PomidorTime({ t }) {
   const [minutes, setMinutes] = useState(25);
@@ -54,10 +55,16 @@ function PomidorTime({ t }) {
     }
 
     if (mode === 'focus') {
-      alert(t.uz ? 'Ajoyib! Fokus seansi yakunlandi. Endi dam oling!' : 'Excellent! Focus session completed. Take a break now!');
+      sendNotification(
+        t.uz ? '🍅 Fokus seansi yakunlandi!' : '🍅 Focus session done!',
+        t.uz ? 'Ajoyib ish! Endi 5 daqiqa dam oling.' : 'Great work! Take a 5-minute break.'
+      );
       switchMode('shortBreak');
     } else {
-      alert(t.uz ? 'Tanaffus yakunlandi! Ishga qaytish vaqti keldi.' : 'Break completed! Time to get back to work.');
+      sendNotification(
+        t.uz ? '☕ Dam olish yakunlandi!' : '☕ Break is over!',
+        t.uz ? 'Ishga qaytish vaqti keldi. Davom eting!' : "Break's over. Time to focus again!"
+      );
       switchMode('focus');
     }
   };
