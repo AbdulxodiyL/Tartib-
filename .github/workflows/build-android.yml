@@ -17,8 +17,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: Tartib_frontend/package-lock.json
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -29,31 +27,28 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install dependencies
+      - name: Install dependencies + Capacitor
         run: |
           cd Tartib_frontend
-          npm ci
+          npm install
+          npm install @capacitor/core @capacitor/cli @capacitor/android --save
 
       - name: Build React app
         run: |
           cd Tartib_frontend
           npm run build
 
-      - name: Add Android platform
+      - name: Add and sync Android platform
         run: |
           cd Tartib_frontend
-          npx cap add android
-
-      - name: Sync Capacitor
-        run: |
-          cd Tartib_frontend
+          npx cap add android || true
           npx cap sync android
 
       - name: Build Debug APK
         run: |
           cd Tartib_frontend/android
           chmod +x ./gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
