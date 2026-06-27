@@ -122,6 +122,24 @@ function App() {
       />
 
       <main className="main-content">
+        {/* Mobile profile header */}
+        <div className="mobile-profile-header" onClick={() => setActiveTab('profile')}>
+          <div className="mobile-avatar">
+            {(user?.first_name || user?.email || 'U')[0].toUpperCase()}
+          </div>
+          <div className="mobile-profile-info">
+            <span className="mobile-profile-name">
+              {user?.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : user?.email}
+            </span>
+            <span className="mobile-profile-sub">
+              Daraja {user?.level || 1} · {user?.xp || 0} XP
+            </span>
+          </div>
+          <svg className="mobile-profile-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+
         {renderActiveView()}
       </main>
 
