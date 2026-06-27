@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { api, saveToken } from '../../utils/api';
 import './style.css';
 
-function Auth({ onSuccess, onClose }) {
-  const [mode, setMode] = useState('login');
-  const [form, setForm] = useState({ email: '', password: '', first_name: '', last_name: '' });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+function Auth({ initialMode = 'login', onSuccess, onClose }) {
+  const [mode, setMode]           = useState(initialMode);
+  const [form, setForm]           = useState({ email: '', password: '', first_name: '', last_name: '' });
+  const [error, setError]         = useState('');
+  const [loading, setLoading]     = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,8 +30,9 @@ function Auth({ onSuccess, onClose }) {
   };
 
   const switchMode = () => {
-    setMode(mode === 'login' ? 'register' : 'login');
+    setMode(m => m === 'login' ? 'register' : 'login');
     setError('');
+    setShowPassword(false);
   };
 
   return (
@@ -64,6 +67,7 @@ function Auth({ onSuccess, onClose }) {
               />
             </div>
           )}
+
           <input
             className="auth-input"
             type="email"
@@ -72,14 +76,28 @@ function Auth({ onSuccess, onClose }) {
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
           />
-          <input
-            className="auth-input"
-            type="password"
-            placeholder="Parol (kamida 6 ta belgi)"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            required
-          />
+
+          {/* Password with show/hide */}
+          <div className="auth-password-wrap">
+            <input
+              className="auth-input auth-password-input"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Parol (kamida 6 ta belgi)"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+            />
+            <button
+              type="button"
+              className="auth-eye-btn"
+              onClick={() => setShowPassword(v => !v)}
+              tabIndex={-1}
+              aria-label={showPassword ? "Parolni yashirish" : "Parolni ko'rsatish"}
+            >
+              {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+            </button>
+          </div>
+
           <button type="submit" className="auth-btn" disabled={loading}>
             {loading ? 'Yuklanmoqda...' : mode === 'login' ? 'Kirish' : "Ro'yxatdan o'tish"}
           </button>

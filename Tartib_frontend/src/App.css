@@ -2213,6 +2213,28 @@ body.landing-open #root {
 }
 .task-search-clear:hover { color: var(--text-primary); }
 
+/* ── Task time range ─── */
+.task-time-range {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+.task-time-input {
+  max-width: 108px !important;
+  padding: 0.7rem 0.5rem !important;
+  font-size: 0.82rem !important;
+}
+.task-time-sep {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+@media (max-width: 700px) {
+  .task-time-range { width: 100%; }
+  .task-time-input { flex: 1; max-width: none !important; }
+}
+
 /* ── Task inline edit ─── */
 .task-edit-input {
   flex: 1;

@@ -39,6 +39,8 @@ export async function initDB() {
       category   TEXT    DEFAULT 'Boshqa',
       due_date   TEXT,
       priority   TEXT    DEFAULT 'medium',
+      start_time TEXT,
+      end_time   TEXT,
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
 
@@ -99,8 +101,8 @@ export async function initDB() {
     );
   `);
   // Mavjud jadvalga priority ustuni qo'shish (agar yo'q bo'lsa)
-  await db.query(`
-    ALTER TABLE tasks ADD COLUMN IF NOT EXISTS priority TEXT DEFAULT 'medium';
-  `);
+  await db.query(`ALTER TABLE tasks ADD COLUMN IF NOT EXISTS priority   TEXT DEFAULT 'medium';`);
+  await db.query(`ALTER TABLE tasks ADD COLUMN IF NOT EXISTS start_time TEXT;`);
+  await db.query(`ALTER TABLE tasks ADD COLUMN IF NOT EXISTS end_time   TEXT;`);
   console.log('NeonDB (PostgreSQL) bazasi tayyor');
 }

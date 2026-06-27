@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, Check, ClipboardList, Calendar, Flag, Search, Pencil, X } from 'lucide-react';
+import { Plus, Trash2, Check, ClipboardList, Calendar, Flag, Search, Pencil, X, Clock } from 'lucide-react';
 import { api } from '../../utils/api';
 
 const PRIORITY_MAP = {
@@ -18,6 +18,8 @@ function Tasklar({ t }) {
   const [customCategory, setCustomCategory] = useState('');
   const [dueDate, setDueDate]           = useState('');
   const [priority, setPriority]         = useState('medium');
+  const [startTime, setStartTime]       = useState('');
+  const [endTime, setEndTime]           = useState('');
   const [statusFilter, setStatusFilter]     = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
@@ -33,7 +35,13 @@ function Tasklar({ t }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const normalizeTask = (t) => ({ ...t, dueDate: t.due_date || '', priority: t.priority || 'medium' });
+  const normalizeTask = (t) => ({
+    ...t,
+    dueDate:    t.due_date    || '',
+    priority:   t.priority    || 'medium',
+    startTime:  t.start_time  || '',
+    endTime:    t.end_time    || '',
+  });
 
   const addTask = async (e) => {
     e.preventDefault();
@@ -41,15 +49,19 @@ function Tasklar({ t }) {
     let finalCategory = categoryType === 'custom' ? (customCategory.trim() || 'Boshqa') : categoryType;
     try {
       const created = await api.addTask({
-        text: newTaskText.trim(),
-        category: finalCategory,
-        due_date: dueDate || new Date().toISOString().split('T')[0],
+        text:       newTaskText.trim(),
+        category:   finalCategory,
+        due_date:   dueDate || new Date().toISOString().split('T')[0],
         priority,
+        start_time: startTime || null,
+        end_time:   endTime   || null,
       });
       setTasks([normalizeTask(created), ...tasks]);
       setNewTaskText('');
       setCustomCategory('');
       setDueDate('');
+      setStartTime('');
+      setEndTime('');
       setPriority('medium');
       if (categoryType === 'custom') setCategoryType('Ish');
     } catch (err) {
@@ -174,6 +186,13 @@ function Tasklar({ t }) {
             </select>
             <input type="date" className="task-input" style={{ maxWidth: '150px' }}
               value={dueDate} onChange={e => setDueDate(e.target.value)} />
+            <div className="task-time-range">
+              <input type="time" className="task-input task-time-input" title="Boshlanish vaqti"
+                value={startTime} onChange={e => setStartTime(e.target.value)} />
+              <span className="task-time-sep">–</span>
+              <input type="time" className="task-input task-time-input" title="Tugash vaqti"
+                value={endTime} onChange={e => setEndTime(e.target.value)} />
+            </div>
             <button type="submit" className="add-task-btn">
               <Plus size={16} /><span>{t.ts_add}</span>
             </button>
@@ -236,16 +255,21 @@ function Tasklar({ t }) {
                       ) : (
                         <span className="task-text" onDoubleClick={() => !task.completed && startEdit(task)}>{task.text}</span>
                       )}
-                      {task.dueDate && editingId !== task.id && (
-                        <span style={{
-                          fontSize: '0.72rem', display: 'flex', alignItems: 'center',
-                          gap: '3px', marginLeft: 'auto',
-                          color: overdue ? '#ef4444' : 'var(--text-muted)',
-                          fontWeight: overdue ? '700' : '500', whiteSpace: 'nowrap'
-                        }}>
-                          <Calendar size={11} />
-                          {overdue ? `Muddati o'tdi: ` : ''}{task.dueDate}
-                        </span>
+                      {editingId !== task.id && (task.dueDate || task.startTime) && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto', flexShrink: 0 }}>
+                          {task.startTime && (
+                            <span style={{ fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '3px', color: 'var(--color-accent)', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                              <Clock size={11} />
+                              {task.startTime}{task.endTime ? `–${task.endTime}` : ''}
+                            </span>
+                          )}
+                          {task.dueDate && (
+                            <span style={{ fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '3px', color: overdue ? '#ef4444' : 'var(--text-muted)', fontWeight: overdue ? '700' : '500', whiteSpace: 'nowrap' }}>
+                              <Calendar size={11} />
+                              {overdue ? `Muddati o'tdi: ` : ''}{task.dueDate}
+                            </span>
+                          )}
+                        </div>
                       )}
                     </div>
                     <div style={{ display: 'flex', gap: '0.25rem' }}>

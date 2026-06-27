@@ -140,3 +140,32 @@
 .auth-switch-btn:hover {
   color: #818cf8;
 }
+
+/* Password show/hide */
+.auth-password-wrap {
+  position: relative;
+}
+
+.auth-password-input {
+  padding-right: 2.75rem;
+}
+
+.auth-eye-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: color 0.15s;
+  line-height: 0;
+}
+
+.auth-eye-btn:hover {
+  color: #f9fafb;
+}
