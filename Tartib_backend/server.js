@@ -12,7 +12,6 @@ import eventRoutes from './routes/events.js';
 import aiRoutes from './routes/ai.js';
 
 dotenv.config();
-initDB();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,6 +38,13 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Server xatosi yuz berdi' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Tartib server http://localhost:${PORT} da ishlamoqda`);
-});
+initDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Tartib server http://localhost:${PORT} da ishlamoqda`);
+    });
+  })
+  .catch((err) => {
+    console.error('DB ulanishda xato:', err.message);
+    process.exit(1);
+  });

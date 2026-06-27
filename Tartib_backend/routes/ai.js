@@ -32,39 +32,35 @@ Javoblaringni:
 router.post('/chat', async (req, res) => {
   const { message, history = [] } = req.body;
 
-  if (!message?.trim()) {
-    return res.status(400).json({ error: 'Xabar bo\'sh bo\'lmasligi kerak.' });
-  }
+  if (!message?.trim())
+    return res.status(400).json({ error: "Xabar bo'sh bo'lmasligi kerak." });
 
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.OPENAI_API_KEY)
     return res.status(502).json({ error: 'AI xizmati sozlanmagan. OPENAI_API_KEY mavjud emas.' });
-  }
-
-  const db = getDB();
-  const today = new Date().toISOString().split('T')[0];
-
-  const taskStats = db.prepare(`
-    SELECT COUNT(*) AS total,
-           SUM(CASE WHEN completed = 1 THEN 1 ELSE 0 END) AS done
-    FROM tasks WHERE user_id = ?
-  `).get(req.userId);
-
-  const todaySessions = db.prepare(`
-    SELECT COUNT(*) AS count
-    FROM pomodoro_sessions
-    WHERE user_id = ? AND mode = 'focus' AND date(completed_at) = ?
-  `).get(req.userId, today);
-
-  const contextNote = `[Foydalanuvchi ma'lumoti: Bugun ${todaySessions.count} ta fokus seansi bajarildi. Jami ${taskStats.total} ta vazifa bor, shundan ${taskStats.done} tasi bajarilgan.]`;
-
-  const messages = [
-    { role: 'system', content: SYSTEM_PROMPT },
-    { role: 'system', content: contextNote },
-    ...history.slice(-6).map(m => ({ role: m.sender === 'user' ? 'user' : 'assistant', content: m.text })),
-    { role: 'user', content: message.trim() },
-  ];
 
   try {
+    const db = getDB();
+    const today = new Date().toISOString().split('T')[0];
+
+    const taskRes = await db.query(
+      'SELECT COUNT(*) AS total, COUNT(*) FILTER (WHERE completed = TRUE) AS done FROM tasks WHERE user_id = $1',
+      [req.userId]
+    );
+    const sessRes = await db.query(
+      "SELECT COUNT(*) AS count FROM pomodoro_sessions WHERE user_id = $1 AND mode = 'focus' AND completed_at::date = $2::date",
+      [req.userId, today]
+    );
+
+    const { total, done } = taskRes.rows[0];
+    const contextNote = `[Foydalanuvchi ma'lumoti: Bugun ${sessRes.rows[0].count} ta fokus seansi bajarildi. Jami ${total} ta vazifa bor, shundan ${done} tasi bajarilgan.]`;
+
+    const messages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'system', content: contextNote },
+      ...history.slice(-6).map(m => ({ role: m.sender === 'user' ? 'user' : 'assistant', content: m.text })),
+      { role: 'user', content: message.trim() },
+    ];
+
     const response = await getClient().chat.completions.create({
       model: 'gpt-4o-mini',
       messages,
@@ -72,11 +68,10 @@ router.post('/chat', async (req, res) => {
       temperature: 0.7,
     });
 
-    const reply = response.choices[0].message.content;
-    res.json({ reply });
+    res.json({ reply: response.choices[0].message.content });
   } catch (err) {
     console.error('OpenAI API xatosi:', err.message);
-    res.status(502).json({ error: 'AI javob bera olmadi. Keyinroq urinib ko\'ring.' });
+    res.status(502).json({ error: "AI javob bera olmadi. Keyinroq urinib ko'ring." });
   }
 });
 
