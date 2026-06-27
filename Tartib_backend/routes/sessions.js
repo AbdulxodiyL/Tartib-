@@ -11,24 +11,64 @@ router.get('/', async (req, res) => {
     const db = getDB();
     const today = new Date().toISOString().split('T')[0];
 
-    const todayRes = await db.query(`
-      SELECT COUNT(*) AS count, COALESCE(SUM(duration_min), 0) AS total_min
-      FROM pomodoro_sessions
-      WHERE user_id = $1 AND mode = 'focus' AND completed_at::date = $2::date
-    `, [req.userId, today]);
+    const [todayRes, allTimeRes, recentRes, weeklyRes] = await Promise.all([
+      db.query(`
+        SELECT COUNT(*) AS count, COALESCE(SUM(duration_min), 0) AS total_min
+        FROM pomodoro_sessions
+        WHERE user_id = $1 AND mode = 'focus' AND completed_at::date = $2::date
+      `, [req.userId, today]),
 
-    const allTimeRes = await db.query(`
-      SELECT COUNT(*) AS count, COALESCE(SUM(duration_min), 0) AS total_min
+      db.query(`
+        SELECT COUNT(*) AS count, COALESCE(SUM(duration_min), 0) AS total_min
+        FROM pomodoro_sessions
+        WHERE user_id = $1 AND mode = 'focus'
+      `, [req.userId]),
+
+      db.query(`
+        SELECT * FROM pomodoro_sessions
+        WHERE user_id = $1
+        ORDER BY completed_at DESC LIMIT 10
+      `, [req.userId]),
+
+      db.query(`
+        SELECT completed_at::date AS day, COALESCE(SUM(duration_min), 0) AS minutes
+        FROM pomodoro_sessions
+        WHERE user_id = $1 AND mode = 'focus'
+          AND completed_at >= NOW() - INTERVAL '7 days'
+        GROUP BY day ORDER BY day ASC
+      `, [req.userId]),
+    ]);
+
+    // Streak: ketma-ket kunlar (bugundan orqaga)
+    const streakRes = await db.query(`
+      SELECT DISTINCT completed_at::date AS day
       FROM pomodoro_sessions
       WHERE user_id = $1 AND mode = 'focus'
+      ORDER BY day DESC
+      LIMIT 365
     `, [req.userId]);
 
-    const recentRes = await db.query(`
-      SELECT * FROM pomodoro_sessions
-      WHERE user_id = $1
-      ORDER BY completed_at DESC
-      LIMIT 10
-    `, [req.userId]);
+    let streak = 0;
+    const days = streakRes.rows.map(r => r.day.toISOString().split('T')[0]);
+    let check = today;
+    for (let i = 0; i < days.length; i++) {
+      if (days[i] === check) {
+        streak++;
+        const d = new Date(check);
+        d.setDate(d.getDate() - 1);
+        check = d.toISOString().split('T')[0];
+      } else break;
+    }
+
+    // Haftalik 7 kun — bo'sh kunlarni ham to'ldirish
+    const weekly = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+      const found = weeklyRes.rows.find(r => r.day.toISOString().split('T')[0] === dateStr);
+      weekly.push({ date: dateStr, minutes: found ? parseInt(found.minutes) : 0 });
+    }
 
     res.json({
       today: {
@@ -40,6 +80,8 @@ router.get('/', async (req, res) => {
         minutes: parseInt(allTimeRes.rows[0].total_min),
       },
       recent: recentRes.rows,
+      weekly,
+      streak,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

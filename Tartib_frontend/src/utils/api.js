@@ -70,4 +70,10 @@ export const api = {
 
   // AI
   aiChat: (body) => request('/ai/chat', { method: 'POST', body: JSON.stringify(body) }),
+
+  // Habits
+  getHabits:     ()       => request('/habits'),
+  addHabit:      (body)   => request('/habits', { method: 'POST', body: JSON.stringify(body) }),
+  deleteHabit:   (id)     => request(`/habits/${id}`, { method: 'DELETE' }),
+  checkinHabit:  (id)     => request(`/habits/${id}/checkin`, { method: 'POST', body: '{}' }),
 };

@@ -10,31 +10,33 @@ import Kalendar from './peyj/Kalendar';
 import Profile from './peyj/Profile';
 import Sozlamalar from './peyj/Sozlamalar';
 import AiYordamchi from './peyj/AiYordamchi';
+import Odatlar from './peyj/Odatlar';
 import { translations } from './utils/translations';
 import { api, clearAuth, getToken } from './utils/api';
 import { requestNotificationPermission } from './utils/notifications';
-import { LayoutDashboard, Timer, CheckSquare, TrendingUp, Calendar, Bot } from 'lucide-react';
+import { getTheme, applyTheme } from './utils/theme';
+import { LayoutDashboard, Timer, CheckSquare, TrendingUp, Calendar, Sparkles } from 'lucide-react';
 import FloatingAI from './components/FloatingAI';
 import './App.css';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser]               = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [showAuth, setShowAuth] = useState(false);
-  const [authMode, setAuthMode] = useState('login');
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [language, setLanguage] = useState('uz');
+  const [showAuth, setShowAuth]       = useState(false);
+  const [authMode, setAuthMode]       = useState('login');
+  const [activeTab, setActiveTab]     = useState('dashboard');
+  const [isDarkMode, setIsDarkMode]   = useState(true);
+  const [language, setLanguage]       = useState('uz');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Apply saved theme on mount
+  useEffect(() => { applyTheme(getTheme()); }, []);
 
   useEffect(() => {
     const token = getToken();
-    if (!token) {
-      setAuthLoading(false);
-      return;
-    }
+    if (!token) { setAuthLoading(false); return; }
     api.me()
-      .then((data) => setUser(data.user))
+      .then(data => setUser(data.user))
       .catch(() => clearAuth())
       .finally(() => setAuthLoading(false));
   }, []);
@@ -51,7 +53,7 @@ function App() {
     setActiveTab('dashboard');
   };
 
-  const openLogin = () => { setAuthMode('login'); setShowAuth(true); };
+  const openLogin    = () => { setAuthMode('login');    setShowAuth(true); };
   const openRegister = () => { setAuthMode('register'); setShowAuth(true); };
 
   const t = translations[language];
@@ -69,11 +71,7 @@ function App() {
       <>
         <Landing onLogin={openLogin} onRegister={openRegister} />
         {showAuth && (
-          <Auth
-            initialMode={authMode}
-            onSuccess={handleAuthSuccess}
-            onClose={() => setShowAuth(false)}
-          />
+          <Auth initialMode={authMode} onSuccess={handleAuthSuccess} onClose={() => setShowAuth(false)} />
         )}
       </>
     );
@@ -89,16 +87,17 @@ function App() {
       case 'profile':   return <Profile t={t} user={user} setUser={setUser} />;
       case 'settings':  return <Sozlamalar t={t} />;
       case 'ai':        return <AiYordamchi t={t} />;
+      case 'odatlar':   return <Odatlar t={t} />;
       default:          return <Dashbord t={t} user={user} />;
     }
   };
 
   const bottomNavItems = [
-    { id: 'dashboard', icon: LayoutDashboard, label: t.dashboard },
-    { id: 'tasks',     icon: CheckSquare,    label: t.tasks },
-    { id: 'pomodoro',  icon: Timer,          label: t.pomodoro },
-    { id: 'calendar',  icon: Calendar,       label: t.calendar },
-    { id: 'income',    icon: TrendingUp,     label: t.income },
+    { id: 'dashboard', icon: LayoutDashboard, label: 'Bosh' },
+    { id: 'tasks',     icon: CheckSquare,     label: 'Tasklar' },
+    { id: 'pomodoro',  icon: Timer,           label: 'Timer' },
+    { id: 'odatlar',   icon: Sparkles,        label: 'Odatlar' },
+    { id: 'calendar',  icon: Calendar,        label: 'Kalendar' },
   ];
 
   return (
@@ -143,17 +142,11 @@ function App() {
         {renderActiveView()}
       </main>
 
-      {/* Floating AI button — all pages */}
       <FloatingAI t={t} />
 
-      {/* Mobile bottom navigation */}
       <nav className="bottom-nav">
         {bottomNavItems.map(({ id, icon: Icon, label }) => (
-          <button
-            key={id}
-            className={`bottom-nav-item ${activeTab === id ? 'active' : ''}`}
-            onClick={() => setActiveTab(id)}
-          >
+          <button key={id} className={`bottom-nav-item ${activeTab === id ? 'active' : ''}`} onClick={() => setActiveTab(id)}>
             <Icon size={22} />
             <span>{label}</span>
           </button>

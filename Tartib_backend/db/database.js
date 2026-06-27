@@ -38,6 +38,7 @@ export async function initDB() {
       completed  BOOLEAN DEFAULT FALSE,
       category   TEXT    DEFAULT 'Boshqa',
       due_date   TEXT,
+      priority   TEXT    DEFAULT 'medium',
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
 
@@ -68,6 +69,23 @@ export async function initDB() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
 
+    CREATE TABLE IF NOT EXISTS habits (
+      id         SERIAL PRIMARY KEY,
+      user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      name       TEXT NOT NULL,
+      emoji      TEXT DEFAULT '⭐',
+      color      TEXT DEFAULT '#6366f1',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS habit_checkins (
+      id       SERIAL PRIMARY KEY,
+      habit_id INTEGER NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
+      user_id  INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      date     TEXT NOT NULL,
+      UNIQUE(habit_id, date)
+    );
+
     CREATE TABLE IF NOT EXISTS user_settings (
       id                  SERIAL PRIMARY KEY,
       user_id             INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -79,6 +97,10 @@ export async function initDB() {
       short_break_length  INTEGER DEFAULT 5,
       long_break_length   INTEGER DEFAULT 15
     );
+  `);
+  // Mavjud jadvalga priority ustuni qo'shish (agar yo'q bo'lsa)
+  await db.query(`
+    ALTER TABLE tasks ADD COLUMN IF NOT EXISTS priority TEXT DEFAULT 'medium';
   `);
   console.log('NeonDB (PostgreSQL) bazasi tayyor');
 }

@@ -10,6 +10,7 @@ import profileRoutes from './routes/profile.js';
 import settingsRoutes from './routes/settings.js';
 import eventRoutes from './routes/events.js';
 import aiRoutes from './routes/ai.js';
+import habitRoutes from './routes/habits.js';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/habits', habitRoutes);
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', app: 'Tartib API' }));
 
