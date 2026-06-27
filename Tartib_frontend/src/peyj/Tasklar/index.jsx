@@ -113,6 +113,7 @@ function Tasklar({ t }) {
 
   const isOverdue = (dateStr) => dateStr && dateStr < new Date().toISOString().split('T')[0];
 
+  const totalTasks     = tasks.length;
   const completedCount = tasks.filter(tk => tk.completed).length;
   const highCount      = tasks.filter(tk => !tk.completed && tk.priority === 'high').length;
 

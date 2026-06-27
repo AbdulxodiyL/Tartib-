@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import Seadbar from './components/seadbar';
 import Auth from './components/Auth';
 import Landing from './peyj/Landing';
-import Dashbord from './peyj/Dashbord';
-import PomidorTime from './peyj/Pomidor.time';
-import Tasklar from './peyj/Tasklar';
-import DaromadStatistica from './peyj/DaromadStatistica';
-import Kalendar from './peyj/Kalendar';
-import Profile from './peyj/Profile';
-import Sozlamalar from './peyj/Sozlamalar';
-import AiYordamchi from './peyj/AiYordamchi';
-import Odatlar from './peyj/Odatlar';
+
+const Dashbord          = lazy(() => import('./peyj/Dashbord'));
+const PomidorTime       = lazy(() => import('./peyj/Pomidor.time'));
+const Tasklar           = lazy(() => import('./peyj/Tasklar'));
+const DaromadStatistica = lazy(() => import('./peyj/DaromadStatistica'));
+const Kalendar          = lazy(() => import('./peyj/Kalendar'));
+const Profile           = lazy(() => import('./peyj/Profile'));
+const Sozlamalar        = lazy(() => import('./peyj/Sozlamalar'));
+const AiYordamchi       = lazy(() => import('./peyj/AiYordamchi'));
+const Odatlar           = lazy(() => import('./peyj/Odatlar'));
 import { translations } from './utils/translations';
 import { api, clearAuth, getToken } from './utils/api';
 import { requestNotificationPermission } from './utils/notifications';
@@ -122,6 +123,7 @@ function App() {
 
       <main className="main-content">
         {/* Mobile profile header */}
+
         <div className="mobile-profile-header" onClick={() => setActiveTab('profile')}>
           <div className="mobile-avatar">
             {(user?.first_name || user?.email || 'U')[0].toUpperCase()}
@@ -139,7 +141,9 @@ function App() {
           </svg>
         </div>
 
-        {renderActiveView()}
+        <Suspense fallback={<div style={{ padding: '2rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>Yuklanmoqda...</div>}>
+          {renderActiveView()}
+        </Suspense>
       </main>
 
       <FloatingAI t={t} />
