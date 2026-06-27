@@ -258,6 +258,72 @@
   transform: scale(1.1);
 }
 
+/* ── Mic button ─── */
+.fab-mic-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary, #111827);
+  color: var(--text-muted, #6b7280);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.fab-mic-btn:hover {
+  background: var(--border-color, #374151);
+  color: var(--text-primary, #f9fafb);
+}
+
+.fab-mic-btn.recording {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25);
+  animation: mic-pulse 1s ease-in-out infinite;
+}
+
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25); }
+  50%       { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.1); }
+}
+
+/* ── Task added card ─── */
+.fab-task-added {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.65rem 0.8rem;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 12px;
+  margin: 0.25rem 0;
+}
+
+.fab-task-added-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #10b981;
+  margin-bottom: 0.2rem;
+}
+
+.fab-task-added-text {
+  font-size: 0.82rem;
+  color: var(--text-primary, #f9fafb);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.fab-task-added-meta {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--text-muted, #6b7280);
+}
+
 /* Backdrop (mobilda) */
 .fab-backdrop {
   position: fixed;

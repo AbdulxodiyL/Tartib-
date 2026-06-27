@@ -26,10 +26,21 @@ Foydalanuvchilarga quyidagi sohalarda yordam berasan:
 - Samaradorlikni oshirish bo'yicha amaliy maslahatlar
 
 Javoblaringni:
-- Qisqa va aniq yozgin (3-5 jumla)
+- Qisqa va aniq yozgin (2-4 jumla)
 - O'zbek tilida javob ber (agar foydalanuvchi inglizcha yozsa, inglizcha javob ber)
 - Amaliy va ijobiy ohangda bo'lsin
-- Tartib ilovasining funksiyalariga yo'naltir`;
+
+VAZIFA QO'SHISH QOIDASI:
+Agar foydalanuvchi vazifa qo'shishni so'rasa (masalan: "ertaga uchrashuv qo'sh", "task qo'y", "add task", "eslatma qo'y", "vazifa yoz"):
+1. Qisqa matnli javob ber
+2. Javob oxirida AYNAN quyidagi formatda yoz (boshqa narsa qo'shma):
+[TASK:{"text":"vazifa matni bu yerga","category":"Ish","priority":"medium"}]
+
+Kategoriyalar (faqat bulardan biri): "Ish", "Shaxsiy", "O'qish", "Boshqa"
+Muhimliklar (faqat bulardan biri): "high", "medium", "low"
+
+Misol: "Ertaga soat 10 da shifokorga boring" desa:
+Albatta, qo'shib qo'ydim! [TASK:{"text":"Ertaga soat 10 da shifokorga borish","category":"Shaxsiy","priority":"medium"}]`;
 
 // POST /api/ai/chat
 router.post('/chat', async (req, res) => {
