@@ -41,6 +41,7 @@ export async function initDB() {
       priority   TEXT    DEFAULT 'medium',
       start_time TEXT,
       end_time   TEXT,
+
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
 
@@ -50,7 +51,8 @@ export async function initDB() {
       source     TEXT    NOT NULL,
       amount     REAL    NOT NULL,
       date       TEXT    NOT NULL,
-      status     TEXT    DEFAULT 'kutilmoqda',
+      type       TEXT    DEFAULT 'kirim',
+      status     TEXT    DEFAULT 'bajarildi',
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
 
@@ -101,7 +103,8 @@ export async function initDB() {
     );
   `);
   // Mavjud jadvalga priority ustuni qo'shish (agar yo'q bo'lsa)
-  await db.query(`ALTER TABLE tasks ADD COLUMN IF NOT EXISTS priority   TEXT DEFAULT 'medium';`);
+  await db.query(`ALTER TABLE tasks         ADD COLUMN IF NOT EXISTS priority   TEXT DEFAULT 'medium';`);
+  await db.query(`ALTER TABLE transactions  ADD COLUMN IF NOT EXISTS type       TEXT DEFAULT 'kirim';`);
   await db.query(`ALTER TABLE tasks ADD COLUMN IF NOT EXISTS start_time TEXT;`);
   await db.query(`ALTER TABLE tasks ADD COLUMN IF NOT EXISTS end_time   TEXT;`);
   await db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS plan             TEXT DEFAULT 'free';`);

@@ -885,7 +885,138 @@ body.landing-open #root {
   gap: 0.25rem;
 }
 
-/* Financial elements */
+/* ── Finance: 3 stat cards ── */
+.fin-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.fin-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.fin-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(16,185,129,0.12);
+  color: #10b981;
+}
+
+.fin-stat.chiqim .fin-stat-icon,
+.chiqim-icon { background: rgba(239,68,68,0.12); color: #ef4444; }
+.fin-stat.qolgan .fin-stat-icon,
+.qolgan-icon { background: rgba(99,102,241,0.12); color: var(--color-accent); }
+.minus-icon  { background: rgba(239,68,68,0.12); color: #ef4444; }
+
+.fin-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.fin-stat-val {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+@media (max-width: 650px) {
+  .fin-stats-row { grid-template-columns: 1fr 1fr; }
+  .fin-stat.qolgan { grid-column: span 2; }
+}
+
+/* Pending bar */
+.fin-pending-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 10px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+/* Kirim/Chiqim type toggle */
+.fin-type-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.fin-type-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-color);
+  background: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.15s;
+}
+
+.fin-type-btn.kirim-btn.active {
+  border-color: #10b981;
+  background: rgba(16,185,129,0.1);
+  color: #10b981;
+}
+
+.fin-type-btn.chiqim-btn.active {
+  border-color: #ef4444;
+  background: rgba(239,68,68,0.1);
+  color: #ef4444;
+}
+
+/* Tx table upgrades */
+.tx-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tx-type-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-green { background: #10b981; }
+.dot-red   { background: #ef4444; }
+
+.tx-type-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+.badge-kirim  { background: rgba(16,185,129,0.12); color: #10b981; }
+.badge-chiqim { background: rgba(239,68,68,0.12);  color: #ef4444; }
+
+.txt-red    { color: #ef4444 !important; }
+.txt-green  { color: #10b981 !important; }
+.txt-accent { color: var(--color-accent) !important; }
+
+/* Financial elements (eski — compat) */
 .financial-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
