@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './css/style.css';
 import LogoWhite from './images/logo.png';
 import {
@@ -16,8 +17,17 @@ import {
   Crown,
   Sparkles,
 } from 'lucide-react';
+import { getTheme, saveTheme, BG_PRESETS } from '../../utils/theme';
 
-function Seadbar({ activeTab, setActiveTab, isDarkMode, setIsDarkMode, language, setLanguage, t, isOpen, setIsOpen, user, onLogout, isPremium, onGoPremium }) {
+function Seadbar({ activeTab, setActiveTab, language, setLanguage, t, isOpen, setIsOpen, user, onLogout, isPremium, onGoPremium }) {
+  const [isDark, setIsDark] = useState(() => BG_PRESETS[getTheme().bg]?.dark ?? true);
+
+  const toggleMode = () => {
+    const current = getTheme();
+    const nextBg  = isDark ? 'light' : 'dark';
+    saveTheme({ ...current, bg: nextBg });
+    setIsDark(!isDark);
+  };
   const menuItems = [
     { id: 'dashboard', label: t.dashboard, icon: LayoutDashboard },
     { id: 'pomodoro',  label: t.pomodoro,  icon: Timer },
@@ -47,10 +57,10 @@ function Seadbar({ activeTab, setActiveTab, isDarkMode, setIsDarkMode, language,
             </button>
             <button
               className="theme-toggle-btn"
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
+              onClick={toggleMode}
+              title={isDark ? 'Yorug\' rejimga o\'tish' : 'Qoʻngʻir rejimga oʻtish'}
             >
-              {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+              {isDark ? <Sun size={16} /> : <Moon size={16} />}
             </button>
             <button
               className="sidebar-close-btn"

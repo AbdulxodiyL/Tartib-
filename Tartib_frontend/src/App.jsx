@@ -35,7 +35,6 @@ function AppInner() {
   const [showAuth, setShowAuth]       = useState(false);
   const [authMode, setAuthMode]       = useState('login');
   const [activeTab, setActiveTab]     = useState('dashboard');
-  const [isDarkMode, setIsDarkMode]   = useState(true);
   const [language, setLanguage]       = useState('uz');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -126,8 +125,6 @@ function AppInner() {
       <Seadbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        isDarkMode={isDarkMode}
-        setIsDarkMode={setIsDarkMode}
         language={language}
         setLanguage={setLanguage}
         t={t}
