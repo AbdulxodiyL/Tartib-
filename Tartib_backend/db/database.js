@@ -104,5 +104,7 @@ export async function initDB() {
   await db.query(`ALTER TABLE tasks ADD COLUMN IF NOT EXISTS priority   TEXT DEFAULT 'medium';`);
   await db.query(`ALTER TABLE tasks ADD COLUMN IF NOT EXISTS start_time TEXT;`);
   await db.query(`ALTER TABLE tasks ADD COLUMN IF NOT EXISTS end_time   TEXT;`);
+  await db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS plan             TEXT DEFAULT 'free';`);
+  await db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS plan_expires_at  TIMESTAMPTZ;`);
   console.log('NeonDB (PostgreSQL) bazasi tayyor');
 }

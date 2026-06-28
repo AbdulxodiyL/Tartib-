@@ -2,6 +2,7 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import Seadbar from './components/seadbar';
 import Auth from './components/Auth';
 import Landing from './peyj/Landing';
+import { ToastProvider } from './contexts/toast';
 
 const Dashbord          = lazy(() => import('./peyj/Dashbord'));
 const PomidorTime       = lazy(() => import('./peyj/Pomidor.time'));
@@ -12,15 +13,23 @@ const Profile           = lazy(() => import('./peyj/Profile'));
 const Sozlamalar        = lazy(() => import('./peyj/Sozlamalar'));
 const AiYordamchi       = lazy(() => import('./peyj/AiYordamchi'));
 const Odatlar           = lazy(() => import('./peyj/Odatlar'));
+const Premium           = lazy(() => import('./peyj/Premium'));
+
 import { translations } from './utils/translations';
 import { api, clearAuth, getToken } from './utils/api';
 import { requestNotificationPermission } from './utils/notifications';
 import { getTheme, applyTheme } from './utils/theme';
-import { LayoutDashboard, Timer, CheckSquare, TrendingUp, Calendar, Sparkles } from 'lucide-react';
+import { LayoutDashboard, Timer, CheckSquare, Calendar, Sparkles, Crown } from 'lucide-react';
 import FloatingAI from './components/FloatingAI';
 import './App.css';
 
-function App() {
+const PAGE_LOADER = (
+  <div style={{ padding: '2rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+    Yuklanmoqda...
+  </div>
+);
+
+function AppInner() {
   const [user, setUser]               = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [showAuth, setShowAuth]       = useState(false);
@@ -30,7 +39,6 @@ function App() {
   const [language, setLanguage]       = useState('uz');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Apply saved theme on mount
   useEffect(() => { applyTheme(getTheme()); }, []);
 
   useEffect(() => {
@@ -58,6 +66,7 @@ function App() {
   const openRegister = () => { setAuthMode('register'); setShowAuth(true); };
 
   const t = translations[language];
+  const isPremium = user?.plan === 'premium';
 
   if (authLoading) {
     return (
@@ -80,16 +89,23 @@ function App() {
 
   const renderActiveView = () => {
     switch (activeTab) {
-      case 'dashboard': return <Dashbord t={t} user={user} />;
-      case 'pomodoro':  return <PomidorTime t={t} />;
-      case 'tasks':     return <Tasklar t={t} />;
+      case 'dashboard': return <Dashbord t={t} user={user} onGoToPremium={() => setActiveTab('premium')} />;
+      case 'pomodoro':  return <PomidorTime t={t} isPremium={isPremium} onGoToPremium={() => setActiveTab('premium')} />;
+      case 'tasks':     return <Tasklar t={t} isPremium={isPremium} onGoToPremium={() => setActiveTab('premium')} />;
       case 'income':    return <DaromadStatistica t={t} />;
       case 'calendar':  return <Kalendar t={t} />;
-      case 'profile':   return <Profile t={t} user={user} setUser={setUser} />;
-      case 'settings':  return <Sozlamalar t={t} />;
+      case 'profile':   return <Profile t={t} user={user} setUser={setUser} onGoToPremium={() => setActiveTab('premium')} />;
+      case 'settings':  return <Sozlamalar t={t} isPremium={isPremium} onGoToPremium={() => setActiveTab('premium')} />;
       case 'ai':        return <AiYordamchi t={t} />;
-      case 'odatlar':   return <Odatlar t={t} />;
-      default:          return <Dashbord t={t} user={user} />;
+      case 'odatlar':   return <Odatlar t={t} isPremium={isPremium} onGoToPremium={() => setActiveTab('premium')} />;
+      case 'premium':   return (
+        <Premium
+          user={user}
+          onBack={() => setActiveTab('dashboard')}
+          onUpgrade={(u) => setUser(u)}
+        />
+      );
+      default: return <Dashbord t={t} user={user} />;
     }
   };
 
@@ -119,11 +135,11 @@ function App() {
         setIsOpen={setIsSidebarOpen}
         user={user}
         onLogout={handleLogout}
+        isPremium={isPremium}
+        onGoPremium={() => setActiveTab('premium')}
       />
 
       <main className="main-content">
-        {/* Mobile profile header */}
-
         <div className="mobile-profile-header" onClick={() => setActiveTab('profile')}>
           <div className="mobile-avatar">
             {(user?.first_name || user?.email || 'U')[0].toUpperCase()}
@@ -131,6 +147,7 @@ function App() {
           <div className="mobile-profile-info">
             <span className="mobile-profile-name">
               {user?.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : user?.email}
+              {isPremium && <span className="mobile-premium-badge"><Crown size={10} /> PRO</span>}
             </span>
             <span className="mobile-profile-sub">
               Daraja {user?.level || 1} · {user?.xp || 0} XP
@@ -141,16 +158,28 @@ function App() {
           </svg>
         </div>
 
-        <Suspense fallback={<div style={{ padding: '2rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>Yuklanmoqda...</div>}>
+        <Suspense fallback={PAGE_LOADER}>
           {renderActiveView()}
         </Suspense>
       </main>
 
-      <FloatingAI t={t} />
+      <FloatingAI t={t} isPremium={isPremium} onGoToPremium={() => setActiveTab('premium')} />
+
+      {/* Premium upgrade banner — faqat bepul foydalanuvchilar uchun */}
+      {!isPremium && activeTab !== 'premium' && (
+        <button className="premium-fab" onClick={() => setActiveTab('premium')} title="Premium olish">
+          <Crown size={16} />
+          <span>Premium</span>
+        </button>
+      )}
 
       <nav className="bottom-nav">
         {bottomNavItems.map(({ id, icon: Icon, label }) => (
-          <button key={id} className={`bottom-nav-item ${activeTab === id ? 'active' : ''}`} onClick={() => setActiveTab(id)}>
+          <button
+            key={id}
+            className={`bottom-nav-item ${activeTab === id ? 'active' : ''}`}
+            onClick={() => setActiveTab(id)}
+          >
             <Icon size={22} />
             <span>{label}</span>
           </button>
@@ -160,4 +189,10 @@ function App() {
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <ToastProvider>
+      <AppInner />
+    </ToastProvider>
+  );
+}

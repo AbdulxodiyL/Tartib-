@@ -76,4 +76,9 @@ export const api = {
   addHabit:      (body)   => request('/habits', { method: 'POST', body: JSON.stringify(body) }),
   deleteHabit:   (id)     => request(`/habits/${id}`, { method: 'DELETE' }),
   checkinHabit:  (id)     => request(`/habits/${id}/checkin`, { method: 'POST', body: '{}' }),
+
+  // Subscription
+  getSubscription:        ()        => request('/subscription'),
+  activateSubscription:   (body)    => request('/subscription/activate', { method: 'POST', body: JSON.stringify(body) }),
+  cancelSubscription:     ()        => request('/subscription/cancel',   { method: 'POST', body: '{}' }),
 };

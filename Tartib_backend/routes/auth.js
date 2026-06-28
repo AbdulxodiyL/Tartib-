@@ -87,12 +87,15 @@ router.get('/me', async (req, res) => {
     const payload = jwt.verify(header.split(' ')[1], process.env.JWT_SECRET);
     const db = getDB();
     const result = await db.query(
-      'SELECT id, email, first_name, last_name, profession, bio, xp, level FROM users WHERE id = $1',
+      'SELECT id, email, first_name, last_name, profession, bio, xp, level, plan, plan_expires_at FROM users WHERE id = $1',
       [payload.userId]
     );
-    const user = result.rows[0];
-    if (!user) return res.status(404).json({ error: 'Foydalanuvchi topilmadi.' });
-    res.json({ user });
+    const u = result.rows[0];
+    if (!u) return res.status(404).json({ error: 'Foydalanuvchi topilmadi.' });
+    const now = new Date();
+    const expires = u.plan_expires_at ? new Date(u.plan_expires_at) : null;
+    const plan = u.plan === 'premium' && expires && expires > now ? 'premium' : 'free';
+    res.json({ user: { ...u, plan } });
   } catch {
     res.status(401).json({ error: 'Token yaroqsiz.' });
   }
