@@ -1993,6 +1993,12 @@ body.landing-open #root {
   display: none;
 }
 
+/* desktop-only: mobilda yashiriladi */
+.desktop-only { display: block; }
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+}
+
 /* ── Premium floating button — FAQAT MOBILDA ── */
 .premium-fab {
   display: none;
