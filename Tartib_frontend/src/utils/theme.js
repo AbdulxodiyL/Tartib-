@@ -13,44 +13,68 @@ export const ACCENT_COLORS = {
 export const BG_PRESETS = {
   // ── Dark ────────────────────────────────────────────────────────────────────
   dark: {
-    name: 'Qoʻngʻir', dark: true,
+    name: 'Qoʻngʻir', dark: true, emoji: '🌑',
     primary: '#0b0f19', secondary: '#111827', sidebar: '#1f2937', card: '#1f2937', border: '#374151',
     borderHover: '#4b5563',
     textPrimary: '#f9fafb', textSecondary: '#cbd5e1', textMuted: '#6b7280',
   },
   darker: {
-    name: 'Toʻq', dark: true,
+    name: 'Toʻq', dark: true, emoji: '⬛',
     primary: '#060912', secondary: '#0d1117', sidebar: '#0d1117', card: '#161b22', border: '#21262d',
     borderHover: '#30363d',
     textPrimary: '#e6edf3', textSecondary: '#8b949e', textMuted: '#484f58',
   },
   midnight: {
-    name: 'Tungi', dark: true,
+    name: 'Tungi', dark: true, emoji: '🌌',
     primary: '#010104', secondary: '#06060a', sidebar: '#0a0a10', card: '#0a0a10', border: '#18181b',
     borderHover: '#27272a',
     textPrimary: '#fafafa', textSecondary: '#a1a1aa', textMuted: '#52525b',
   },
   charcoal: {
-    name: 'Kulrang', dark: true,
+    name: 'Kulrang', dark: true, emoji: '🪨',
     primary: '#111111', secondary: '#1a1a1a', sidebar: '#222222', card: '#222222', border: '#333333',
     borderHover: '#444444',
     textPrimary: '#f5f5f5', textSecondary: '#a3a3a3', textMuted: '#525252',
   },
+  navy: {
+    name: 'Ko\'k', dark: true, emoji: '🌊',
+    primary: '#050d1f', secondary: '#0a1628', sidebar: '#0d1f3c', card: '#0d1f3c', border: '#1a3a5c',
+    borderHover: '#2a5080',
+    textPrimary: '#e8f4fd', textSecondary: '#94b8d4', textMuted: '#4a7a9b',
+  },
+  forest: {
+    name: 'O\'rmon', dark: true, emoji: '🌲',
+    primary: '#040f0a', secondary: '#071a10', sidebar: '#0a2416', card: '#0a2416', border: '#1a3d28',
+    borderHover: '#2a5a3a',
+    textPrimary: '#e8fdf0', textSecondary: '#7abf96', textMuted: '#3d7a55',
+  },
+  sunset: {
+    name: 'Binafsha', dark: true, emoji: '🌆',
+    primary: '#0e0618', secondary: '#160a24', sidebar: '#1e0f30', card: '#1e0f30', border: '#3b1d5c',
+    borderHover: '#5a2e8a',
+    textPrimary: '#f5e8ff', textSecondary: '#c49de8', textMuted: '#7a4fa8',
+  },
+  rose: {
+    name: 'Qoʻngʻir-qizil', dark: true, emoji: '🌹',
+    primary: '#120608', secondary: '#1e0c10', sidebar: '#2a1018', card: '#2a1018', border: '#4a1f28',
+    borderHover: '#6b2d3a',
+    textPrimary: '#fdf0f2', textSecondary: '#e8a0aa', textMuted: '#9a5060',
+  },
   // ── Light ───────────────────────────────────────────────────────────────────
   light: {
-    name: 'Oq', dark: false,
+    name: 'Oq', dark: false, emoji: '☀️',
     primary: '#f8fafc', secondary: '#f1f5f9', sidebar: '#ffffff', card: '#ffffff', border: '#e2e8f0',
     borderHover: '#cbd5e1',
     textPrimary: '#0f172a', textSecondary: '#475569', textMuted: '#94a3b8',
   },
   white: {
-    name: 'Toza oq', dark: false,
+    name: 'Toza oq', dark: false, emoji: '⬜',
     primary: '#ffffff', secondary: '#f9fafb', sidebar: '#f3f4f6', card: '#ffffff', border: '#e5e7eb',
     borderHover: '#d1d5db',
     textPrimary: '#111827', textSecondary: '#4b5563', textMuted: '#9ca3af',
   },
   cream: {
-    name: 'Sariqish', dark: false,
+    name: 'Sariqish', dark: false, emoji: '🍦',
     primary: '#fefce8', secondary: '#fef9c3', sidebar: '#ffffff', card: '#ffffff', border: '#fde68a',
     borderHover: '#fcd34d',
     textPrimary: '#1c1917', textSecondary: '#57534e', textMuted: '#a8a29e',

@@ -78,16 +78,37 @@ function Sozlamalar({ t }) {
           {/* Background */}
           <div className="theme-section">
             <p className="theme-label">Fon uslubi</p>
-            <div className="theme-chips">
-              {Object.entries(BG_PRESETS).map(([key, bg]) => (
+
+            {/* Dark presets */}
+            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, marginBottom: '0.5rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>🌙 Qoʻngʻir rejim</p>
+            <div className="theme-chips" style={{ marginBottom: '1rem' }}>
+              {Object.entries(BG_PRESETS).filter(([, bg]) => bg.dark).map(([key, bg]) => (
                 <button
                   key={key}
                   className={`theme-chip ${theme.bg === key ? 'active' : ''}`}
                   style={{ background: bg.card, border: `2px solid ${theme.bg === key ? 'var(--color-accent)' : bg.border}` }}
                   onClick={() => updateTheme('bg', key)}
                 >
-                  <span style={{ display: 'block', width: '18px', height: '18px', borderRadius: '4px', background: bg.primary, border: `1px solid ${bg.border}`, marginBottom: '4px' }} />
-                  <span style={{ fontSize: '0.65rem', color: bg.textSecondary, fontWeight: 700 }}>{bg.name}</span>
+                  <span style={{ fontSize: '1.1rem', lineHeight: 1, marginBottom: '4px', display: 'block' }}>{bg.emoji}</span>
+                  <span style={{ display: 'block', width: '24px', height: '10px', borderRadius: '3px', background: bg.primary, border: `1px solid ${bg.border}`, marginBottom: '4px' }} />
+                  <span style={{ fontSize: '0.62rem', color: bg.textSecondary, fontWeight: 700 }}>{bg.name}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Light presets */}
+            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, marginBottom: '0.5rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>☀️ Yorug' rejim</p>
+            <div className="theme-chips">
+              {Object.entries(BG_PRESETS).filter(([, bg]) => !bg.dark).map(([key, bg]) => (
+                <button
+                  key={key}
+                  className={`theme-chip ${theme.bg === key ? 'active' : ''}`}
+                  style={{ background: bg.card, border: `2px solid ${theme.bg === key ? 'var(--color-accent)' : bg.border}` }}
+                  onClick={() => updateTheme('bg', key)}
+                >
+                  <span style={{ fontSize: '1.1rem', lineHeight: 1, marginBottom: '4px', display: 'block' }}>{bg.emoji}</span>
+                  <span style={{ display: 'block', width: '24px', height: '10px', borderRadius: '3px', background: bg.primary, border: `1px solid ${bg.border}`, marginBottom: '4px' }} />
+                  <span style={{ fontSize: '0.62rem', color: bg.textSecondary, fontWeight: 700 }}>{bg.name}</span>
                 </button>
               ))}
             </div>
