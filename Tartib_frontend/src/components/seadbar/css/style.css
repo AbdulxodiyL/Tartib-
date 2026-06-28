@@ -192,6 +192,30 @@
   margin-top: 0.75rem;
 }
 
+/* ─── Premium button in sidebar ─── */
+.sidebar-premium-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  transition: opacity 0.15s, transform 0.15s;
+  box-shadow: 0 2px 12px rgba(245,158,11,0.35);
+}
+
+.sidebar-premium-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
 .ai-assistant-btn {
   display: flex;
   align-items: center;

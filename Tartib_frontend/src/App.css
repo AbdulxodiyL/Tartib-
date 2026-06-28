@@ -1862,38 +1862,35 @@ body.landing-open #root {
   display: none;
 }
 
-/* ── Premium floating button (desktop + mobile) ── */
+/* ── Premium floating button — FAQAT MOBILDA ── */
 .premium-fab {
-  position: fixed;
-  bottom: 5rem;
-  left: 1.25rem;
-  z-index: 190;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: linear-gradient(135deg, #f59e0b, #fbbf24);
-  color: #000;
-  border: none;
-  border-radius: 20px;
-  padding: 0.45rem 0.9rem;
-  font-size: 0.78rem;
-  font-weight: 800;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(245,158,11,0.4);
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-
-.premium-fab:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(245,158,11,0.5);
+  display: none;
 }
 
 @media (max-width: 768px) {
   .premium-fab {
+    display: flex;
+    position: fixed;
     bottom: 5.5rem;
     left: 0.75rem;
-    padding: 0.4rem 0.75rem;
-    font-size: 0.72rem;
+    z-index: 190;
+    align-items: center;
+    gap: 0.4rem;
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: #000;
+    border: none;
+    border-radius: 20px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(245,158,11,0.4);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .premium-fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(245,158,11,0.5);
   }
 }
 

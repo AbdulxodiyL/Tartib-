@@ -13,22 +13,24 @@ import {
   Moon,
   X,
   LogOut,
+  Crown,
+  Sparkles,
 } from 'lucide-react';
 
-function Seadbar({ activeTab, setActiveTab, isDarkMode, setIsDarkMode, language, setLanguage, t, isOpen, setIsOpen, user, onLogout }) {
+function Seadbar({ activeTab, setActiveTab, isDarkMode, setIsDarkMode, language, setLanguage, t, isOpen, setIsOpen, user, onLogout, isPremium, onGoPremium }) {
   const menuItems = [
     { id: 'dashboard', label: t.dashboard, icon: LayoutDashboard },
-    { id: 'pomodoro', label: t.pomodoro, icon: Timer },
-    { id: 'tasks', label: t.tasks, icon: CheckSquare },
-    { id: 'income', label: t.income, icon: TrendingUp },
-    { id: 'calendar', label: t.calendar, icon: Calendar },
-    { id: 'profile', label: t.profile, icon: User },
-    { id: 'settings', label: t.settings, icon: Settings },
+    { id: 'pomodoro',  label: t.pomodoro,  icon: Timer },
+    { id: 'tasks',     label: t.tasks,     icon: CheckSquare },
+    { id: 'income',    label: t.income,    icon: TrendingUp },
+    { id: 'calendar',  label: t.calendar,  icon: Calendar },
+    { id: 'odatlar',   label: 'Odatlar',   icon: Sparkles },
+    { id: 'profile',   label: t.profile,   icon: User },
+    { id: 'settings',  label: t.settings,  icon: Settings },
   ];
 
   return (
     <div className={`seadbar-container${isOpen ? ' sidebar-open' : ''}`}>
-      {/* Top Logo Section */}
       <div>
         <div className="logo-box">
           <div className="logo-left">
@@ -60,7 +62,7 @@ function Seadbar({ activeTab, setActiveTab, isDarkMode, setIsDarkMode, language,
           </div>
         </div>
 
-        {/* User Profile Info */}
+        {/* User Profile */}
         <div className="user-profile">
           <div className="avatar-container">
             <div className="avatar">{(user?.first_name || user?.email || 'U')[0].toUpperCase()}</div>
@@ -69,12 +71,23 @@ function Seadbar({ activeTab, setActiveTab, isDarkMode, setIsDarkMode, language,
           <div className="user-info">
             <span className="username">
               {user?.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : (user?.email || '')}
+              {isPremium && (
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '2px',
+                  background: 'linear-gradient(135deg,#f59e0b,#fbbf24)',
+                  color: '#000', fontSize: '0.58rem', fontWeight: 800,
+                  padding: '1px 5px', borderRadius: '5px', marginLeft: '5px',
+                  verticalAlign: 'middle',
+                }}>
+                  <Crown size={9} /> PRO
+                </span>
+              )}
             </span>
             <span className="email">{user?.email || ''}</span>
           </div>
         </div>
 
-        {/* Navigation Items */}
+        {/* Nav */}
         <nav className="nav-links">
           {menuItems.map((item) => {
             const Icon = item.icon;
@@ -92,8 +105,19 @@ function Seadbar({ activeTab, setActiveTab, isDarkMode, setIsDarkMode, language,
         </nav>
       </div>
 
-      {/* Bottom AI Assistant Section */}
+      {/* Bottom section */}
       <div className="bottom-section">
+        {/* Premium button — faqat bepul foydalanuvchilar uchun */}
+        {!isPremium && (
+          <button
+            className="sidebar-premium-btn"
+            onClick={() => { onGoPremium?.(); setIsOpen(false); }}
+          >
+            <Crown size={15} />
+            <span>Premium olish</span>
+          </button>
+        )}
+
         <button
           className={`ai-assistant-btn ${activeTab === 'ai' ? 'active' : ''}`}
           onClick={() => { setActiveTab('ai'); setIsOpen(false); }}
@@ -101,14 +125,14 @@ function Seadbar({ activeTab, setActiveTab, isDarkMode, setIsDarkMode, language,
           <Bot size={18} />
           <span>{t.ai}</span>
         </button>
+
         <button
           className="ai-assistant-btn"
           onClick={onLogout}
           style={{ marginTop: '0.35rem', color: '#ef4444', opacity: 0.7 }}
-          title={t.uz ? 'Chiqish' : 'Log out'}
         >
           <LogOut size={18} />
-          <span>{t.uz ? 'Chiqish' : 'Log out'}</span>
+          <span>Chiqish</span>
         </button>
       </div>
     </div>
