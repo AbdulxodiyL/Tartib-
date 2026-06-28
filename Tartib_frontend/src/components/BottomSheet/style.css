@@ -82,7 +82,7 @@
   .page-fab {
     display: flex;
     position: fixed;
-    bottom: 5.5rem;
+    bottom: 9rem;
     right: 1rem;
     z-index: 300;
     width: 52px;
