@@ -118,7 +118,7 @@ function AppInner() {
   ];
 
   return (
-    <div className={`app-container ${isDarkMode ? 'dark-theme' : ''}`}>
+    <div className="app-container">
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)} />
       )}

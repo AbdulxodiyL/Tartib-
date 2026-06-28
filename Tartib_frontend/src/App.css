@@ -1,50 +1,33 @@
 :root {
   --font-family: 'Plus Jakarta Sans', sans-serif;
-  
-  /* Light Theme (Default) */
-  --bg-primary: #f8fafc;
-  --bg-secondary: #f1f5f9;
-  --bg-sidebar: #ffffff;
-  --bg-card: #ffffff;
-  --border-color: #e2e8f0;
-  --border-color-hover: #cbd5e1;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  
-  --color-accent: #4f46e5;
-  --color-accent-hover: #3730a3;
-  --color-accent-gradient: #4f46e5; /* flat accent color */
-  --color-ai-gradient: #db2777;
-  --color-glow: rgba(79, 70, 229, 0.05);
-  
-  --transition-fast: 0.15s ease;
+
+  /* Default dark — applyTheme() overrides these from localStorage on load */
+  --bg-primary:   #0b0f19;
+  --bg-secondary: #111827;
+  --bg-sidebar:   #1f2937;
+  --bg-card:      #1f2937;
+  --border-color:       #374151;
+  --border-color-hover: #4b5563;
+  --text-primary:   #f9fafb;
+  --text-secondary: #cbd5e1;
+  --text-muted:     #6b7280;
+
+  --color-accent:       #6366f1;
+  --color-accent-hover: #4f46e5;
+  --color-glow:         rgba(99,102,241,0.08);
+
+  --transition-fast:   0.15s ease;
   --transition-normal: 0.2s ease;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+
+  --card-radius:  12px;
+  --btn-radius:   8px;
+  --input-radius: 8px;
+  --font-size-base: 14px;
 }
 
-.dark-theme {
-  /* Dark Theme */
-  --bg-primary: #0b0f19;
-  --bg-secondary: #111827;
-  --bg-sidebar: #1f2937;
-  --bg-card: #1f2937;
-  --border-color: #374151;
-  --border-color-hover: #4b5563;
-  --text-primary: #f9fafb;
-  --text-secondary: #cbd5e1;
-  --text-muted: #6b7280;
-  
-  --color-accent: #6366f1;
-  --color-accent-hover: #4f46e5;
-  --color-accent-gradient: #6366f1;
-  --color-ai-gradient: #ec4899;
-  --color-glow: rgba(99, 102, 241, 0.08);
-  
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-}
+/* .dark-theme removed — applyTheme() in theme.js sets all CSS vars on :root directly */
 
 * {
   margin: 0;
