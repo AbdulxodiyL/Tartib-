@@ -71,19 +71,12 @@ export const FONT_PRESETS = {
 
 export function getTheme() {
   try {
-    const saved = JSON.parse(localStorage.getItem('tartib_theme'));
-    // v2 migration: old saves had bg:'dark' as default — reset to light once
-    if (!saved || (!saved._v && saved.bg === 'dark')) {
-      const fresh = defaultTheme();
-      localStorage.setItem('tartib_theme', JSON.stringify(fresh));
-      return fresh;
-    }
-    return saved;
+    return JSON.parse(localStorage.getItem('tartib_theme')) || defaultTheme();
   } catch { return defaultTheme(); }
 }
 
 export function defaultTheme() {
-  return { accent: 'indigo', bg: 'light', radius: 'rounded', font: 'normal', _v: 2 };
+  return { accent: 'indigo', bg: 'dark', radius: 'rounded', font: 'normal' };
 }
 
 export function saveTheme(theme) {
