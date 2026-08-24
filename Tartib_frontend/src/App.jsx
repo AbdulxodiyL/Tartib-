@@ -14,12 +14,13 @@ const Sozlamalar        = lazy(() => import('./peyj/Sozlamalar'));
 const AiYordamchi       = lazy(() => import('./peyj/AiYordamchi'));
 const Odatlar           = lazy(() => import('./peyj/Odatlar'));
 const Premium           = lazy(() => import('./peyj/Premium'));
+const Goals             = lazy(() => import('./peyj/Goals'));
 
 import { translations } from './utils/translations';
 import { api, clearAuth, getToken } from './utils/api';
 import { requestNotificationPermission } from './utils/notifications';
 import { getTheme, applyTheme } from './utils/theme';
-import { LayoutDashboard, Timer, CheckSquare, Calendar, Sparkles, Crown } from 'lucide-react';
+import { LayoutDashboard, Timer, CheckSquare, Calendar, Sparkles, Crown, Search, Bell, Sun, Moon, Target } from 'lucide-react';
 import FloatingAI from './components/FloatingAI';
 import './App.css';
 
@@ -88,7 +89,7 @@ function AppInner() {
 
   const renderActiveView = () => {
     switch (activeTab) {
-      case 'dashboard': return <Dashbord t={t} user={user} onGoToPremium={() => setActiveTab('premium')} />;
+      case 'dashboard': return <Dashbord t={t} user={user} onGoToPremium={() => setActiveTab('premium')} onGoToGoals={() => setActiveTab('goals')} />;
       case 'pomodoro':  return <PomidorTime t={t} isPremium={isPremium} onGoToPremium={() => setActiveTab('premium')} />;
       case 'tasks':     return <Tasklar t={t} isPremium={isPremium} onGoToPremium={() => setActiveTab('premium')} />;
       case 'income':    return <DaromadStatistica t={t} />;
@@ -97,6 +98,7 @@ function AppInner() {
       case 'settings':  return <Sozlamalar t={t} isPremium={isPremium} onGoToPremium={() => setActiveTab('premium')} />;
       case 'ai':        return <AiYordamchi t={t} />;
       case 'odatlar':   return <Odatlar t={t} isPremium={isPremium} onGoToPremium={() => setActiveTab('premium')} />;
+      case 'goals':     return <Goals onBack={() => setActiveTab('dashboard')} />;
       case 'premium':   return (
         <Premium
           user={user}
@@ -114,6 +116,7 @@ function AppInner() {
     { id: 'pomodoro',  icon: Timer,           label: 'Timer' },
     { id: 'odatlar',   icon: Sparkles,        label: 'Odatlar' },
     { id: 'calendar',  icon: Calendar,        label: 'Kalendar' },
+    { id: 'goals',     icon: Target,          label: t.goals },
   ];
 
   return (
@@ -137,6 +140,21 @@ function AppInner() {
       />
 
       <main className="main-content">
+        <div className="app-topbar">
+          <span className="app-topbar-title">
+            {activeTab === 'dashboard' ? 'Bugun' : activeTab === 'goals' ? t.goals : t[activeTab] || t.dashboard}
+          </span>
+          <div className="app-topbar-actions">
+            <button className="topbar-icon-btn" aria-label="Qidirish"><Search size={16} /></button>
+            <button className="topbar-icon-btn" aria-label="Bildirishnomalar"><Bell size={16} /></button>
+            <button className="topbar-icon-btn" aria-label="Mavzuni almashtirish" onClick={() => document.querySelector('.theme-toggle-btn')?.click()}>
+              {document.body.classList.contains('dark-mode') ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <button className="topbar-avatar" aria-label="Profilga o‘tish" onClick={() => setActiveTab('profile')}>
+              {(user?.first_name || user?.email || 'U')[0].toUpperCase()}
+            </button>
+          </div>
+        </div>
         <div className="mobile-profile-header" onClick={() => setActiveTab('profile')}>
           <div className="mobile-avatar">
             {(user?.first_name || user?.email || 'U')[0].toUpperCase()}

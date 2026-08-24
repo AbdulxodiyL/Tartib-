@@ -12,14 +12,23 @@ import eventRoutes from './routes/events.js';
 import aiRoutes from './routes/ai.js';
 import habitRoutes from './routes/habits.js';
 import subscriptionRoutes from './routes/subscription.js';
+import goalRoutes from './routes/goals.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigins = new Set([
+  ...(process.env.CLIENT_URL || 'http://localhost:5173').split(',').map(origin => origin.trim()),
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+]);
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.has(origin)) return callback(null, true);
+    return callback(new Error('CORS origin ruxsat etilmagan.'));
+  },
   credentials: true,
 }));
 app.use(express.json());
@@ -34,6 +43,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/habits', habitRoutes);
 app.use('/api/subscription', subscriptionRoutes);
+app.use('/api/goals', goalRoutes);
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', app: 'Tartib API' }));
 

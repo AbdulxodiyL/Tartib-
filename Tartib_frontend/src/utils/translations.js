@@ -10,6 +10,7 @@ export const translations = {
     profile: "Profile",
     settings: "Sozlamalar",
     ai: "AI yordamchi",
+    goals: "Maqsadlar",
     
     // Dashboard page
     db_welcome: "Xush kelibsiz, Asilbek!",
@@ -24,6 +25,9 @@ export const translations = {
     db_chartBadge: "Haftalik",
     db_aiAdvisor: "AI Aqlli Maslahatchi",
     db_aiCta: "AI yordamchidan so'rash",
+    db_activeGoals: "Faol maqsadlar",
+    db_goalRoadmap: "Yo'l xaritasi tayyorlanmoqda",
+    db_noGoals: "Hali faol maqsad yo'q.",
     
     // Pomodoro page
     pm_title: "Pomidor Time",
@@ -156,6 +160,7 @@ export const translations = {
     profile: "Profile",
     settings: "Settings",
     ai: "AI Assistant",
+    goals: "Goals",
     
     // Dashboard page
     db_welcome: "Welcome back, Asilbek!",
@@ -170,6 +175,9 @@ export const translations = {
     db_chartBadge: "Weekly",
     db_aiAdvisor: "AI Smart Advisor",
     db_aiCta: "Ask AI Assistant",
+    db_activeGoals: "Active goals",
+    db_goalRoadmap: "Roadmap is being prepared",
+    db_noGoals: "No active goals yet.",
     
     // Pomodoro page
     pm_title: "Pomodoro Time",

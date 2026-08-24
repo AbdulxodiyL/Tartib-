@@ -44,6 +44,20 @@ export const api = {
   deleteTask: (id) => request(`/tasks/${id}`, { method: 'DELETE' }),
   clearCompleted: () => request('/tasks', { method: 'DELETE' }),
 
+  // Goals
+  getGoals: () => request('/goals'),
+  getGoal: (id) => request(`/goals/${id}`),
+  addGoal: (body) => request('/goals', { method: 'POST', body: JSON.stringify(body) }),
+  updateGoal: (id, body) => request(`/goals/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
+  deleteGoal: (id) => request(`/goals/${id}`, { method: 'DELETE' }),
+  generateGoalPlan: (id) => request(`/goals/${id}/generate-plan`, { method: 'POST', body: '{}' }),
+  planGoalDay: (id, body = {}) => request(`/goals/${id}/plan-day`, { method: 'POST', body: JSON.stringify(body) }),
+  confirmGoalDay: (id, planId) => request(`/goals/${id}/plan-day/${planId}/confirm`, { method: 'POST', body: '{}' }),
+  getGoalMilestones: (id) => request(`/goals/${id}/milestones`),
+  addGoalMilestone: (id, body) => request(`/goals/${id}/milestones`, { method: 'POST', body: JSON.stringify(body) }),
+  updateGoalMilestone: (id, milestoneId, body) => request(`/goals/${id}/milestones/${milestoneId}`, { method: 'PUT', body: JSON.stringify(body) }),
+  getGoalTasks: (id) => request(`/goals/${id}/tasks`),
+
   // Transactions
   getTransactions: () => request('/transactions'),
   getSummary: () => request('/transactions/summary'),

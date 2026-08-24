@@ -16,11 +16,15 @@ import {
   LogOut,
   Crown,
   Sparkles,
+  Target,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from 'lucide-react';
 import { getTheme, saveTheme, BG_PRESETS } from '../../utils/theme';
 
 function Seadbar({ activeTab, setActiveTab, language, setLanguage, t, isOpen, setIsOpen, user, onLogout, isPremium, onGoPremium }) {
   const [isDark, setIsDark] = useState(() => BG_PRESETS[getTheme().bg]?.dark ?? true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleMode = () => {
     const current = getTheme();
@@ -35,12 +39,13 @@ function Seadbar({ activeTab, setActiveTab, language, setLanguage, t, isOpen, se
     { id: 'income',    label: t.income,    icon: TrendingUp },
     { id: 'calendar',  label: t.calendar,  icon: Calendar },
     { id: 'odatlar',   label: 'Odatlar',   icon: Sparkles },
+    { id: 'goals',     label: t.goals,      icon: Target },
     { id: 'profile',   label: t.profile,   icon: User },
     { id: 'settings',  label: t.settings,  icon: Settings },
   ];
 
   return (
-    <div className={`seadbar-container${isOpen ? ' sidebar-open' : ''}`}>
+    <div className={`seadbar-container${isOpen ? ' sidebar-open' : ''}${isCollapsed ? ' sidebar-collapsed' : ''}`}>
       <div>
         <div className="logo-box">
           <div className="logo-left">
@@ -68,6 +73,9 @@ function Seadbar({ activeTab, setActiveTab, language, setLanguage, t, isOpen, se
               aria-label="Menyuni yopish"
             >
               <X size={16} />
+            </button>
+            <button className="sidebar-collapse-btn" onClick={() => setIsCollapsed(!isCollapsed)} aria-label={isCollapsed ? 'Menyuni kengaytirish' : 'Menyuni yig‘ish'}>
+              {isCollapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
             </button>
           </div>
         </div>
@@ -108,7 +116,7 @@ function Seadbar({ activeTab, setActiveTab, language, setLanguage, t, isOpen, se
                 onClick={() => { setActiveTab(item.id); setIsOpen(false); }}
               >
                 <Icon size={18} />
-                <span>{item.label}</span>
+                <span className="nav-label">{item.label}</span>
               </div>
             );
           })}
@@ -124,7 +132,7 @@ function Seadbar({ activeTab, setActiveTab, language, setLanguage, t, isOpen, se
             onClick={() => { onGoPremium?.(); setIsOpen(false); }}
           >
             <Crown size={15} />
-            <span>Premium olish</span>
+            <span className="nav-label">Premium olish</span>
           </button>
         )}
 
@@ -133,7 +141,7 @@ function Seadbar({ activeTab, setActiveTab, language, setLanguage, t, isOpen, se
           onClick={() => { setActiveTab('ai'); setIsOpen(false); }}
         >
           <Bot size={18} />
-          <span>{t.ai}</span>
+          <span className="nav-label">{t.ai}</span>
         </button>
 
         <button
@@ -142,7 +150,7 @@ function Seadbar({ activeTab, setActiveTab, language, setLanguage, t, isOpen, se
           style={{ marginTop: '0.35rem', color: '#ef4444', opacity: 0.7 }}
         >
           <LogOut size={18} />
-          <span>Chiqish</span>
+          <span className="nav-label">Chiqish</span>
         </button>
       </div>
     </div>

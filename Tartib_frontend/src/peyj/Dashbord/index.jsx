@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Timer, CheckCircle2, TrendingUp, Sparkles, Flame, Plus } from 'lucide-react';
+import { Timer, CheckCircle2, TrendingUp, Sparkles, Flame, Plus, Target, ArrowRight } from 'lucide-react';
 import { api } from '../../utils/api';
 
 const DAY_UZ = ['Yak', 'Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sha'];
@@ -32,8 +32,8 @@ function WeeklyChart({ weekly }) {
   );
 }
 
-function Dashbord({ t, user }) {
-  const [stats, setStats]       = useState({ sessions: null, tasks: null, income: null });
+function Dashbord({ t, user, onGoToGoals }) {
+  const [stats, setStats]       = useState({ sessions: null, tasks: null, income: null, goals: [] });
   const [quickTask, setQuickTask] = useState('');
   const [quickAdded, setQuickAdded] = useState(false);
 
@@ -42,8 +42,9 @@ function Dashbord({ t, user }) {
       api.getSessions().catch(() => null),
       api.getTasks().catch(() => null),
       api.getSummary().catch(() => null),
-    ]).then(([sessData, tasksData, incData]) => {
-      setStats({ sessions: sessData, tasks: tasksData, income: incData });
+      api.getGoals().catch(() => []),
+    ]).then(([sessData, tasksData, incData, goalsData]) => {
+      setStats({ sessions: sessData, tasks: tasksData, income: incData, goals: goalsData });
     });
   }, []);
 
@@ -80,7 +81,7 @@ function Dashbord({ t, user }) {
       value: `${todayHours} soat`,
       sub: `${stats.sessions?.today?.sessions ?? 0} seans bugun`,
       icon: Timer,
-      color: '#8b5cf6',
+      color: '#16a34a',
       progress: Math.min((todayMinutes / 120) * 100, 100),
     },
     {
@@ -154,6 +155,11 @@ function Dashbord({ t, user }) {
       </form>
 
       <div className="dashboard-sections">
+        <div className="dashboard-card section-card goal-dashboard-card">
+          <div className="section-card-header"><h3><Target size={16} /> {t.db_activeGoals}</h3><button className="goal-dashboard-link" onClick={onGoToGoals}><ArrowRight size={16} /></button></div>
+          {stats.goals.filter(goal => goal.status === 'active').slice(0, 2).map(goal => <button className="dashboard-goal-row" key={goal.id} onClick={onGoToGoals}><span><strong>{goal.title}</strong><small>{goal.current_milestone || t.db_goalRoadmap}</small></span><b>{goal.progress || 0}%</b></button>)}
+          {!stats.goals.some(goal => goal.status === 'active') && <p className="empty-goal">{t.db_noGoals}</p>}
+        </div>
         <div className="dashboard-card section-card">
           <div className="section-card-header">
             <h3>{t.db_chartTitle}</h3>

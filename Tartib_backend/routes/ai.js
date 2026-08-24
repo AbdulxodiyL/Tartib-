@@ -1,21 +1,10 @@
 import { Router } from 'express';
-import OpenAI from 'openai';
 import { requireAuth } from '../middleware/auth.js';
 import { getDB } from '../db/database.js';
+import { generateGemini, hasGeminiKey } from '../utils/gemini.js';
 
 const router = Router();
 router.use(requireAuth);
-
-let _client = null;
-function getClient() {
-  if (!_client) {
-    _client = new OpenAI({
-      apiKey: process.env.GROQ_API_KEY || 'placeholder',
-      baseURL: 'https://api.groq.com/openai/v1',
-    });
-  }
-  return _client;
-}
 
 const SYSTEM_PROMPT = `Sen "Tartib" — shaxsiy unumdorlik ilovasi uchun yaratilgan AI yordamchisan.
 Foydalanuvchilarga quyidagi sohalarda yordam berasan:
@@ -49,8 +38,8 @@ router.post('/chat', async (req, res) => {
   if (!message?.trim())
     return res.status(400).json({ error: "Xabar bo'sh bo'lmasligi kerak." });
 
-  if (!process.env.GROQ_API_KEY)
-    return res.status(502).json({ error: 'AI xizmati sozlanmagan. GROQ_API_KEY mavjud emas.' });
+  if (!hasGeminiKey())
+    return res.status(503).json({ error: 'AI xizmati sozlanmagan. GEMINI_API_KEY mavjud emas.' });
 
   try {
     const db = getDB();
@@ -64,9 +53,15 @@ router.post('/chat', async (req, res) => {
       "SELECT COUNT(*) AS count FROM pomodoro_sessions WHERE user_id = $1 AND mode = 'focus' AND completed_at::date = $2::date",
       [req.userId, today]
     );
+    const goalRes = await db.query(`
+      SELECT g.id, g.title, g.progress, g.deadline,
+        COALESCE(json_agg(json_build_object('text', t.text, 'completed', t.completed)) FILTER (WHERE t.id IS NOT NULL), '[]') AS today_tasks
+      FROM goals g LEFT JOIN tasks t ON t.goal_id = g.id AND t.user_id = $1 AND t.due_date = $2
+      WHERE g.user_id = $1 AND g.status = 'active'
+      GROUP BY g.id ORDER BY g.deadline NULLS LAST`, [req.userId, today]);
 
     const { total, done } = taskRes.rows[0];
-    const contextNote = `[Foydalanuvchi ma'lumoti: Bugun ${sessRes.rows[0].count} ta fokus seansi bajarildi. Jami ${total} ta vazifa bor, shundan ${done} tasi bajarilgan.]`;
+    const contextNote = `[Foydalanuvchi ma'lumoti: Bugun ${sessRes.rows[0].count} ta fokus seansi bajarildi. Jami ${total} ta vazifa bor, shundan ${done} tasi bajarilgan. Faol maqsadlar va bugungi tasklar: ${JSON.stringify(goalRes.rows)}]`;
 
     const messages = [
       { role: 'system', content: SYSTEM_PROMPT + '\n\n' + contextNote },
@@ -74,16 +69,15 @@ router.post('/chat', async (req, res) => {
       { role: 'user', content: message.trim() },
     ];
 
-    const response = await getClient().chat.completions.create({
-      model: 'llama-3.1-8b-instant',
-      messages,
-      max_tokens: 512,
-      temperature: 0.7,
-    });
-
-    res.json({ reply: response.choices[0].message.content });
+    const system = messages.find(message => message.role === 'system')?.content;
+    const chatMessages = messages.filter(message => message.role !== 'system');
+    const reply = await generateGemini({ system, messages: chatMessages, maxTokens: 512, temperature: 0.7 });
+    res.json({ reply });
   } catch (err) {
-    console.error('Groq API xatosi:', err.message);
+    console.error('Gemini API xatosi:', err.message);
+    if (err.status === 400 || err.status === 401 || err.status === 403 || err.code === 'API_KEY_INVALID' || err.code === 'UNAUTHENTICATED' || err.code === 'PERMISSION_DENIED') {
+      return res.status(503).json({ error: 'GEMINI_API_KEY yaroqsiz. Backend .env faylidagi AI kalitni yangilang.' });
+    }
     res.status(502).json({ error: "AI javob bera olmadi. Keyinroq urinib ko'ring." });
   }
 });

@@ -9,8 +9,19 @@
   padding: 1.25rem 0.85rem;
   overflow-y: auto;
   user-select: none;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  transition: width var(--transition-normal), background-color var(--transition-fast), border-color var(--transition-fast);
 }
+
+.sidebar-collapse-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); border-radius: 6px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.sidebar-collapse-btn:hover { color: var(--color-accent); border-color: var(--color-accent); }
+.sidebar-collapsed { width: 76px; }
+.sidebar-collapsed .logo-box { justify-content: center; }
+.sidebar-collapsed .logo-text, .sidebar-collapsed .logo-actions, .sidebar-collapsed .user-info, .sidebar-collapsed .nav-label, .sidebar-collapsed .sidebar-premium-btn span { display: none; }
+.sidebar-collapsed .user-profile, .sidebar-collapsed .nav-item, .sidebar-collapsed .ai-assistant-btn { justify-content: center; }
+.sidebar-collapsed .user-profile { padding: .5rem; }
+.sidebar-collapsed .nav-item { padding: .7rem; }
+.sidebar-collapsed .nav-item.active { border-left: 0; padding-left: .7rem; }
+.sidebar-collapsed .sidebar-premium-btn { justify-content: center; padding: .7rem; }
 
 /* Header & Logo */
 .logo-box {
@@ -294,4 +305,7 @@
   .sidebar-close-btn {
     display: flex;
   }
+
+  .sidebar-collapse-btn { display: none; }
+  .sidebar-collapsed { width: 260px; }
 }

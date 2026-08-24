@@ -100,7 +100,7 @@ export function getTheme() {
 }
 
 export function defaultTheme() {
-  return { accent: 'indigo', bg: 'dark', radius: 'rounded', font: 'normal' };
+  return { accent: 'green', bg: 'forest', radius: 'rounded', font: 'normal' };
 }
 
 export function saveTheme(theme) {
@@ -119,6 +119,11 @@ export function applyTheme(theme) {
   root.style.setProperty('--color-accent',       accent.value);
   root.style.setProperty('--color-accent-hover', accent.hover);
   root.style.setProperty('--color-glow',         accent.glow);
+  root.style.setProperty('--primary',            accent.value);
+  root.style.setProperty('--primary-hover',      accent.hover);
+  root.style.setProperty('--success',             '#16a34a');
+  root.style.setProperty('--danger',              '#dc2626');
+  root.style.setProperty('--warning',             '#d97706');
 
   // Backgrounds
   root.style.setProperty('--bg-primary',   bg.primary);
@@ -134,6 +139,13 @@ export function applyTheme(theme) {
   root.style.setProperty('--text-primary',   bg.textPrimary);
   root.style.setProperty('--text-secondary', bg.textSecondary);
   root.style.setProperty('--text-muted',     bg.textMuted);
+  root.style.setProperty('--background',     bg.primary);
+  root.style.setProperty('--surface',        bg.card);
+  root.style.setProperty('--surface-secondary', bg.secondary);
+  root.style.setProperty('--border',         bg.border);
+  root.style.setProperty('--text',           bg.textPrimary);
+  root.style.setProperty('--text-secondary-token', bg.textSecondary);
+  root.style.setProperty('--muted',          bg.textMuted);
 
   // Shadow adapts to brightness
   const s = bg.dark
