@@ -1,4 +1,4 @@
-?import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, Bot, CalendarDays, Check, CheckSquare, ChevronDown, Clock3, Coffee, Command, Menu, Moon, Sparkles, Sun, Target, TrendingUp, X } from 'lucide-react';
 import './style.css';
 
