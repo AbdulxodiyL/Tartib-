@@ -54,12 +54,19 @@
   -webkit-font-smoothing: antialiased;
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
+  max-width: 100%;
   transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
@@ -101,6 +108,8 @@ body.landing-open #root {
 #root {
   height: 100%;
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Custom Scrollbars */
@@ -126,15 +135,19 @@ body.landing-open #root {
 .app-container {
   display: flex;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   background-color: var(--bg-primary);
   transition: background-color var(--transition-fast);
 }
 
 .main-content {
   flex: 1;
+  min-width: 0;
   height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 1.5rem 2rem 2rem;
   background-color: var(--bg-primary);
 }
@@ -2088,10 +2101,10 @@ body.landing-open #root {
     display: none !important;
   }
 
-  /* Sidebar — mobilda ham yashirin tursin */
-  .seadbar-container {
-    transform: translateX(-100%);
-  }
+  /* Sidebar — mobilda pozitsiyasi components/seadbar/css/style.css da boshqariladi
+     (position: fixed; left: -280px; .sidebar-open bilan left: 0).
+     Bu yerda qo'shimcha transform berilmaydi — aks holda sidebar-open holatida
+     ham u translateX(-100%) bilan ekrandan tashqarida qolib qolar edi. */
 
   /* Bottom navigation */
   .bottom-nav {
