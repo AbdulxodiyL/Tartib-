@@ -15,9 +15,9 @@ services:
         generateValue: true
       - key: CLIENT_URL
         value: https://tartib.vercel.app
-      - key: DATABASE_URL
+      - key: postgresql://neondb_owner:npg_E3cHJa7wVOit@ep-proud-poetry-aslotw3l-pooler.c-4.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
         sync: false
-      - key: GEMINI_API_KEY
+      - key: AQ.Ab8RN6LRb5zY2h6XAZPcNdS583rtZtb00qzk4bBnXTeGymWMPg
         sync: false
       - key: GEMINI_MODEL
         value: gemini-2.5-flash
