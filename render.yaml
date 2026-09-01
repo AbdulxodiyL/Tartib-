@@ -15,7 +15,7 @@ services:
         generateValue: true
       - key: CLIENT_URL
         value: https://tartib.vercel.app
-      - key: postgresql://neondb_owner:npg_E3cHJa7wVOit@ep-proud-poetry-aslotw3l-pooler.c-4.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      - key: DATABASE_URL
         sync: false
       - key: GROQ_API_KEY
         sync: false
